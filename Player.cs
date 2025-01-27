@@ -22,6 +22,8 @@ public partial class Player : Area2D
 	/// </summary>
 	private Vector2 _screensize = Vector2.Zero;
 
+	private AnimatedSprite2D animatedSprite2D;
+
 	#endregion
 
 	#region Constructors
@@ -50,6 +52,8 @@ public partial class Player : Area2D
 	{
 		// setup the screensize variable with the correct size.
 		_screensize = GetViewportRect().Size;
+
+		animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -116,10 +120,17 @@ public partial class Player : Area2D
 			Vector2 velocity = Vector2.Zero;
 			if (Input.IsActionPressed("ui_up"))
 			{
-				velocity += Vector2.Up.Rotated(Rotation) * Velocity;
+				velocity += Vector2.Up.Rotated(Rotation).Normalized() * Velocity;
 			}
 			
 			Position += velocity * delta;
+			Position = new Vector2(
+				x: Mathf.Clamp(Position.X, 0, _screensize.X),
+				y: Mathf.Clamp(Position.Y, 0, _screensize.Y)
+			);
+
+			animatedSprite2D.Animation = velocity.Normalized() == Vector2.Zero ? "park" : "drive";
+			animatedSprite2D.Play();
 		}
 		// park
 		else if (_gear == 0)
@@ -135,6 +146,9 @@ public partial class Player : Area2D
 				direction++;
 			}
 			Rotation += Mathf.Pi * direction * delta;
+
+			animatedSprite2D.Animation = direction == 0 ? "park" : "drive";
+			animatedSprite2D.Play();
 		}
 		// reverse
 		else if (_gear < 0)
@@ -153,12 +167,19 @@ public partial class Player : Area2D
 
 			// move the sprite based on user input
 			Vector2 velocity = Vector2.Zero;
-			if (Input.IsActionPressed("ui_down"))
+			if (Input.IsActionPressed("ui_up"))
 			{
-				velocity -= Vector2.Down.Rotated(Rotation) * Velocity;
+				velocity -= Vector2.Down.Rotated(Rotation).Normalized() * Velocity;
 			}
 
 			Position += velocity * delta;
+			Position = new Vector2(
+				x: Mathf.Clamp(Position.X, 0, _screensize.X),
+				y: Mathf.Clamp(Position.Y, 0, _screensize.Y)
+			);
+
+			animatedSprite2D.Animation = velocity.Normalized() == Vector2.Zero ? "park" : "drive";
+			animatedSprite2D.Play();
 		}
 	}
 
