@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://vuxbm541gpk2"]
+
+[ext_resource type="Texture2D" uid="uid://ccscgpymnj0c8" path="res://sprites/blue-f1-car-001.svg" id="1_nagui"]
+[ext_resource type="Texture2D" uid="uid://dm2sv8xx4r6o0" path="res://sprites/red-f1-car-001.svg" id="2_1n75s"]
+[ext_resource type="Texture2D" uid="uid://ba3fa41344wcd" path="res://sprites/green-f1-car-001.svg" id="3_56m34"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_icbtd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_nagui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_1n75s")
+}],
+"loop": true,
+"name": &"drive",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_56m34")
+}],
+"loop": true,
+"name": &"park",
+"speed": 5.0
+}]
+
+[node name="Mob" type="RigidBody2D"]
+position = Vector2(680, 503)
+collision_mask = 0
+gravity_scale = 0.0
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -1)
+sprite_frames = SubResource("SpriteFrames_icbtd")
+animation = &"drive"
+frame_progress = 0.330026
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, -1)
+polygon = PackedVector2Array(-46, -76, -35, -87, -22, -92, -7, -94, 7, -94, 23, -92, 34, -87, 45, -76, 46, -70, 46, 97, -46, 97)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

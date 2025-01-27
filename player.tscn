@@ -28,7 +28,7 @@ animations = [{
 }]
 
 [node name="Player" type="Area2D"]
-position = Vector2(221, 240)
+position = Vector2(264, 599)
 script = ExtResource("1_uw1oa")
 metadata/_edit_group_ = true
 
@@ -39,3 +39,5 @@ frame_progress = 0.0989246
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-46, -76, -35, -87, -22, -92, -7, -94, 7, -94, 23, -92, 34, -87, 45, -76, 46, -70, 46, 97, -46, 97)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

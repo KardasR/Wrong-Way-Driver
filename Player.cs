@@ -3,6 +3,14 @@ using System;
 
 public partial class Player : Area2D
 {
+
+	#region Signals
+	
+	[Signal]
+	public delegate void HitEventHandler();
+
+	#endregion
+
 	#region Member Variables
 
 	/// <summary>
@@ -183,5 +191,14 @@ public partial class Player : Area2D
 		}
 	}
 
+	private void OnBodyEntered(Node2D body)
+	{
+		Hide();
+		EmitSignal(SignalName.Hit);
+
+		GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
+	}
+
 	#endregion
+
 }
