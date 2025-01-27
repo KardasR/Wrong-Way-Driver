@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://vuxbm541gpk2"]
+[gd_scene load_steps=6 format=3 uid="uid://vuxbm541gpk2"]
 
 [ext_resource type="Texture2D" uid="uid://ccscgpymnj0c8" path="res://sprites/blue-f1-car-001.svg" id="1_nagui"]
+[ext_resource type="Script" path="res://Mob.cs" id="1_tpn87"]
 [ext_resource type="Texture2D" uid="uid://dm2sv8xx4r6o0" path="res://sprites/red-f1-car-001.svg" id="2_1n75s"]
 [ext_resource type="Texture2D" uid="uid://ba3fa41344wcd" path="res://sprites/green-f1-car-001.svg" id="3_56m34"]
 
@@ -30,6 +31,7 @@ animations = [{
 position = Vector2(680, 503)
 collision_mask = 0
 gravity_scale = 0.0
+script = ExtResource("1_tpn87")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -43,3 +45,5 @@ position = Vector2(0, -1)
 polygon = PackedVector2Array(-46, -76, -35, -87, -22, -92, -7, -94, 7, -94, 23, -92, 34, -87, 45, -76, 46, -70, 46, 97, -46, 97)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
