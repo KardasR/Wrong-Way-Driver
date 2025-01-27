@@ -199,6 +199,15 @@ public partial class Player : Area2D
 		GetNode<CollisionPolygon2D>("CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, true);
 	}
 
+	/// <summary>
+	/// Position the object to the given position.
+	/// </summary>
+	/// <param name="startPosition"></param>
+	public void Start(Vector2 startPosition)
+	{
+		Position = startPosition;
+	}
+
 	#endregion
 
 }
