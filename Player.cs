@@ -16,7 +16,6 @@ public partial class Player : Area2D
 	/// <summary>
 	/// <para>1+	=	multiply base speed by the gear</para>
 	/// <para>0		=	park</para>
-	/// <para>-1	=	reverse</para>
 	/// </summary>
 	private int _gear = 0;
 
@@ -87,7 +86,7 @@ public partial class Player : Area2D
 			// shift down on ctrl key press
 			if (eventKey.Pressed && eventKey.Keycode == Key.Ctrl)
 			{
-				if (_gear > -2)
+				if (_gear > 0)
 				{
 					_gear--;
 				}
@@ -109,7 +108,7 @@ public partial class Player : Area2D
     /// </summary>
     private void Drive(float delta)
 	{
-		// drive forward
+		// drive
 		if (_gear > 0)
 		{
 			// rotate the sprite based on user input
@@ -129,6 +128,10 @@ public partial class Player : Area2D
 			if (Input.IsActionPressed("ui_up"))
 			{
 				velocity += Vector2.Up.Rotated(Rotation).Normalized() * Velocity;
+			}
+			if (Input.IsActionPressed("ui_down"))
+			{
+				velocity += Vector2.Down.Rotated(Rotation).Normalized() * Velocity;
 			}
 			
 			Position += velocity * delta;
@@ -156,37 +159,6 @@ public partial class Player : Area2D
 			Rotation += Mathf.Pi * direction * delta;
 
 			animatedSprite2D.Animation = direction == 0 ? "park" : "drive";
-			animatedSprite2D.Play();
-		}
-		// reverse
-		else if (_gear < 0)
-		{
-			// rotate the sprite based on user input
-			int direction = 0;
-			if (Input.IsActionPressed("ui_left"))
-			{
-				direction--;
-			}
-			if (Input.IsActionPressed("ui_right"))
-			{
-				direction++;
-			}
-			Rotation += Mathf.Pi * direction * delta;
-
-			// move the sprite based on user input
-			Vector2 velocity = Vector2.Zero;
-			if (Input.IsActionPressed("ui_up"))
-			{
-				velocity -= Vector2.Down.Rotated(Rotation).Normalized() * Velocity;
-			}
-
-			Position += velocity * delta;
-			Position = new Vector2(
-				x: Mathf.Clamp(Position.X, 0, _screensize.X),
-				y: Mathf.Clamp(Position.Y, 0, _screensize.Y)
-			);
-
-			animatedSprite2D.Animation = velocity.Normalized() == Vector2.Zero ? "park" : "drive";
 			animatedSprite2D.Play();
 		}
 	}

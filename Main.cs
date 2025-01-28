@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Godot;
 
 public partial class Main : Node
@@ -6,6 +8,11 @@ public partial class Main : Node
 	#region Member Variables
 
 	private int _score;
+
+	/// <summary>
+	/// Holds the size of the screen after the node is loaded into the scene
+	/// </summary>
+	private Vector2 _screensize = Vector2.Zero;
 
 	#endregion
 
@@ -58,12 +65,13 @@ public partial class Main : Node
 
 	private void NewGame()
 	{
-		_score = 0;
-
 		// move the player to the starting position.
 		Player player = GetNode<Player>("Player");
 		Marker2D startPosition = GetNode<Marker2D>("StartPosition");
 		player.Start(startPosition.Position);
+
+		_score = 0;
+		_screensize = player.GetViewportRect().Size;
 
 		GetNode<Timer>("StartTimer").Start();
 	}
@@ -77,7 +85,7 @@ public partial class Main : Node
 		PathFollow2D wwdSpawnLocation = GetNode<PathFollow2D>("MobPath/MobSpawnLocation");
 		wwdSpawnLocation.ProgressRatio = GD.Randf();
 		wwd.Position = new Vector2(
-			x: wwdSpawnLocation.Position.X,
+			x: GD.RandRange(128, (int)_screensize.X - 128),
 			y: 0
 		);
 
@@ -85,7 +93,7 @@ public partial class Main : Node
 		wwd.Rotation = Mathf.Tau / 2;
 
 		// choose the velocity
-		Vector2 velocity = new Vector2((float)GD.RandRange(150.0, 250.0), 0);
+		Vector2 velocity = new Vector2((float)GD.RandRange(450.0, 800.0), 0);
 		wwd.LinearVelocity = velocity.Rotated(Mathf.Tau / 4);	// force the mob to go downwards
 
 		// spawn the wwd by adding it to the Main scene.
