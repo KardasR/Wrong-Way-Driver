@@ -14,6 +14,8 @@ public partial class Main : Node
 	/// </summary>
 	private Vector2 _screensize = Vector2.Zero;
 
+	private Hud _hud;
+
 	#endregion
 
 	#region Signals
@@ -44,7 +46,8 @@ public partial class Main : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		NewGame();
+		//NewGame();
+		_hud = GetNode<Hud>("HUD");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,14 +64,26 @@ public partial class Main : Node
 		// stop the timers
 		GetNode<Timer>("MobTimer").Stop();
 		GetNode<Timer>("ScoreTimer").Stop();
+
+		// update the hud
+		GetNode<Hud>("HUD").ShowGameOver();
 	}
 
 	private void NewGame()
 	{
-		// move the player to the starting position.
+		// update the hud
+		_hud.UpdateScore(_score);
+		_hud.ShowMessage("Get Ready!");
+
+		// setup the player
 		Player player = GetNode<Player>("Player");
 		Marker2D startPosition = GetNode<Marker2D>("StartPosition");
 		player.Start(startPosition.Position);
+
+		GetNode<CollisionPolygon2D>("Player/CollisionPolygon2D").SetDeferred(CollisionPolygon2D.PropertyName.Disabled, false);
+		player.Rotation = Mathf.Tau;
+
+		player.Show();
 
 		_score = 0;
 		_screensize = player.GetViewportRect().Size;
@@ -107,6 +122,7 @@ public partial class Main : Node
 	private void OnScoreTimerTimeout()
 	{
 		_score++;
+		_hud.UpdateScore(_score);
 		GD.Print($"Score:{_score}");
 	}
 

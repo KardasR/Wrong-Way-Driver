@@ -59,12 +59,10 @@ public partial class Hud : CanvasLayer
 
 		Timer messageTimer = GetNode<Timer>("MessageTimer");
 		await ToSignal(messageTimer, Timer.SignalName.Timeout);
-
-		Label message = GetNode<Label>("Message");
-		message.Text = "Dodge the wrong way drivers!";
-		message.Show();
-
-		GetNode<Timer>("MessageTimer").Start();
+		
+		Button btn = GetNode<Button>("StartButton");
+		btn.Text = "Try Again";
+		btn.Show();
 	}
 
 	public void UpdateScore(int score)
