@@ -68,6 +68,34 @@ public partial class Main : Node
 		GetNode<Timer>("StartTimer").Start();
 	}
 
+	private void SpawnWWDs()
+	{
+		// create a "wrong way driver"
+		Mob wwd = MobScene.Instantiate<Mob>();
+
+		// set the mobs spawn position to a random location on the x axis.
+		PathFollow2D wwdSpawnLocation = GetNode<PathFollow2D>("MobPath/MobSpawnLocation");
+		wwdSpawnLocation.ProgressRatio = GD.Randf();
+		wwd.Position = new Vector2(
+			x: wwdSpawnLocation.Position.X,
+			y: 0
+		);
+
+		// set a direction for the mob sprite to face
+		wwd.Rotation = Mathf.Tau / 2;
+
+		// choose the velocity
+		Vector2 velocity = new Vector2((float)GD.RandRange(150.0, 250.0), 0);
+		wwd.LinearVelocity = velocity.Rotated(Mathf.Tau / 4);	// force the mob to go downwards
+
+		// spawn the wwd by adding it to the Main scene.
+		AddChild(wwd);
+	}
+
+	#endregion
+
+	#region On Methods
+
 	private void OnScoreTimerTimeout()
 	{
 		_score++;
@@ -84,29 +112,7 @@ public partial class Main : Node
 
 	private void OnMobTimerTimeout()
 	{
-		// create a "wrong way driver"
-		Mob wwd = MobScene.Instantiate<Mob>();
-
-		// choose a random location on the path
-		PathFollow2D wwdSpawnLocation = GetNode<PathFollow2D>("MobPath/MobSpawnLocation");
-		wwdSpawnLocation.ProgressRatio = GD.Randf();
-
-		// set the wrong way drivers direction perpendicular to the path direction.
-		float direction = wwdSpawnLocation.Rotation + Mathf.Pi / 2;
-
-		// set the mobs position to a random location.
-		wwd.Position = wwdSpawnLocation.Position;
-
-		// add some randomness to the direction.
-		direction += (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
-		wwd.Rotation = direction;
-
-		// choose the velocity
-		Vector2 velocity = new Vector2((float)GD.RandRange(150.0, 250.0), 0);
-		wwd.LinearVelocity = velocity.Rotated(direction);
-
-		// spawn the wwd by adding it to the Main scene.
-		AddChild(wwd);
+		SpawnWWDs();
 	}
 
 	#endregion
